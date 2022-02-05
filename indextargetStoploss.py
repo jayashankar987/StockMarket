@@ -3,6 +3,7 @@ from locale import currency
 
 from typing import Final
 from colorama import Fore, Back, Style
+import os
 
 
 LONG_POSITION: Final = 1
@@ -93,7 +94,7 @@ def getDeltaValue():
 def getTradeDetails():
     global entryPrice
     entryPrice = float(input(Fore.WHITE + Back.GREEN + "Enter ENTRY PRICE for selected INDEX: "))
-    if(entryPrice < 0 or ()):
+    if(entryPrice <= 0):
         print(Fore.WHITE + Back.RED + "********************** POTENTIAL 100% LOSS DETECTED **********************")
         getTradeDetails()
         return
@@ -103,27 +104,27 @@ def getTradeDetails():
 def evaluate():
         global targetPoints
         global stoplossPoints
-
+        
         if (CE == peOrCe):
-            targetPoints = indexTarget - currntIndex
-            stoplossPoints = currntIndex - indexStopLoss
+                targetPoints = indexTarget - currntIndex
+                stoplossPoints = currntIndex - indexStopLoss
         elif (PE == peOrCe) :
-            targetPoints = currntIndex - indexTarget
-            stoplossPoints = indexStopLoss - currntIndex
+                targetPoints = currntIndex - indexTarget
+                stoplossPoints = indexStopLoss - currntIndex
         else:
-            print(Fore.WHITE + Back.RED + "********************** INVALID PE(Put Option) or CE(Call Option) INPUT **********************")
-            getTradeType()
+                print(Fore.WHITE + Back.RED + "********************** INVALID PE(Put Option) or CE(Call Option) INPUT **********************")
+                getTradeType()
+        showTargetAndStoplossPrices()
 
     
-    
-getTradeType()
-
-if (LONG_POSITION == longOrShortPosition):
+def showTargetAndStoplossPrices():
+    global optionsTargetPrice
+    global optionsStopLossPrice
     optionsTargetPrice = entryPrice + (targetPoints * deltaValue)
     optionsStopLossPrice = entryPrice - (stoplossPoints * deltaValue)
-elif(SHORT_POSITION == longOrShortPosition):
-    optionsTargetPrice = entryPrice - (targetPoints * deltaValue)
-    optionsStopLossPrice = entryPrice + (stoplossPoints * deltaValue)
+
+os.system('cls' if os.name == 'nt' else 'clear')
+getTradeType()
 
 print(Fore.WHITE + Back.GREEN + "Your TARGET for entry of option is: ", optionsTargetPrice)
 print(Fore.WHITE + Back.RED + "Your STOPLOSS for the entry of option is ", optionsStopLossPrice)
